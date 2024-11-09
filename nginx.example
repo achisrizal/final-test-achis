@@ -1,0 +1,26 @@
+server {
+    listen 80;
+    server_name example.com;  # Ganti dengan nama domain Anda
+
+    root /var/www/laravel-app/public;  # Ganti dengan path ke aplikasi Laravel Anda
+
+    index index.php index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;  # Ganti dengan versi PHP yang sesuai
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+
+    error_log  /var/log/nginx/laravel-error.log;
+    access_log /var/log/nginx/laravel-access.log;
+}
